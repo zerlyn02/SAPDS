@@ -114,3 +114,22 @@ footer nav a:hover, footer nav a.active {
     margin-bottom: 10px;
 }
 
+.image-container {
+    background-color: #ffffff;
+    border-radius: 8px;
+    padding: 10px;
+    display: flex;
+    align-items: center;
+    margin: 10px ;
+    max-width: 120px; /* Adjust width as needed */
+}
+
+.image-container img {
+    padding-top: 400px;
+    width: auto; /* Ensure the image scales proportionally */
+    height: auto;
+    max-height: 500px; /* Adjust height as needed */
+    transform: rotate(90deg); /* Rotate the image vertically */
+    border-radius: 8px;
+    display: block;
+}
