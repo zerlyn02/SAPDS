@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - SAPDS</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #84b98d;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        .container {
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            max-width: 400px;
+            width: 80%;
+        }
+
+        h1 {
+            color: #435c47;
+        }
+
+        img {
+            width: 80px;
+            margin-bottom: 20px;
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+        }
+
+        input {
+            margin-top: 10px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+
+        button {
+            margin-top: 20px;
+            padding: 10px;
+            background-color: #435c47;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #3b4f3e;
+        }
+
+        .links {
+            margin-top: 20px;
+            text-align: center;
+        }
+
+        .links a {
+            color: #435c47;
+            text-decoration: none;
+            font-weight: bold;
+            margin: 0 5px;
+        }
+
+        .links a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <img src="img/logo.png" alt="SAPDS Logo">
+        <h1>SAPDS</h1>
+        <form action="login.php" method="POST">
+            <input type="text" id="username" name="username" placeholder="Username" required>
+            <input type="password" id="password" name="password" placeholder="Password" required>
+            <button type="submit">Login</button>
+        </form>
+        <div class="links">
+            <p>
+                New to the system? <a href="register.html">Register</a><br>
+                <a href="#">Forgot Password?</a>
+            </p>
+        </div>
+    </div>
+</body>
+</html>
