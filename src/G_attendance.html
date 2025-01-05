@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Attendance</title>
+    <link rel="stylesheet" href="css/attendance.css">
+</head>
+<body>
+    <header>
+        <img src="img/logo.png" alt="Logo">
+        <h1>Attendance Page</h1>
+    </header>
+
+    <div class="info">
+        <p>
+            <label for="year">Year:</label>
+            <select id="year" name="year">
+                <option value="2020">2020</option>
+                <option value="2021">2021</option>
+                <option value="2022">2022</option>
+                <option value="2023">2023</option>
+                <option value="2024">2024</option>
+                <option value="2025">2025</option>
+            </select>
+        </p>
+        <p>
+            <label for="name">Name: John Doe</label>
+            <!-- <select id="name" name="name">
+                <option value="John Doe">John Doe</option>
+                <option value="Jane Smith">Jane Smith</option>
+                <option value="Bob Johnson">Bob Johnson</option>
+                <option value="Alice Brown">Alice Brown</option>
+                <option value="Charlie Davis">Charlie Davis</option>
+            </select> -->
+        </p>
+    </div>
+
+    <div class="info">
+        <table>
+            <thead>
+                <tr>
+                    <th>No</th>
+                    <th>Date</th>
+                    <th>Attendance</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>1</td>
+                    <td>2025-01-01</td>
+                    <td><input type="checkbox" checked disabled></td>
+                </tr>
+                <tr>
+                    <td>2</td>
+                    <td>2025-01-02</td>
+                    <td><input type="checkbox" checked disabled></td>
+                </tr>
+                <tr>
+                    <td>3</td>
+                    <td>2025-01-03</td>
+                    <td><input type="checkbox" disabled></td>
+                </tr>
+                <tr>
+                    <td>4</td>
+                    <td>2025-01-04</td>
+                    <td><input type="checkbox" disabled></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="buttons">
+        <a href="summary.html">
+            <img src="img/summary.png" alt="Summary">
+            Summary
+        </a>
+    </div>
+
+    <footer>
+        <nav>
+            <a href="G_main.html">Home</a>
+            <a href="attendance.html" class="active">Attendance</a>
+            <a href="location.html">Location</a>
+            <a href="schedule.html">Schedule</a>
+        </nav>
+    </footer>
+</body>
+</html>

@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Location</title>
+    <link rel="stylesheet" href="css/attendance.css">
+    <script>
+        // Function to filter table rows based on selected name
+        function filterTable() {
+            const selectedName = document.getElementById("student").value;
+            const tableRows = document.querySelectorAll("tbody tr");
+
+            tableRows.forEach(row => {
+                const nameCell = row.querySelector("td:first-child").textContent;
+                // Show or hide rows based on selection
+                row.style.display = (selectedName === "All" || nameCell === selectedName) ? "" : "none";
+            });
+        }
+    </script>
+</head>
+<body>
+    <header>
+        <img src="img/logo.png" alt="Logo">
+        <h1>Location Page</h1>
+    </header>
+
+    <div class="info">
+        <p>
+            <label for="student">Student:</label>
+            <select id="student" name="student" onchange="filterTable()">
+                <option value="All">All</option>
+                <option value="John Doe">John Doe</option>
+                <option value="Jane Smith">Jane Smith</option>
+                <option value="Alice Brown">Alice Brown</option>
+                <option value="Bob Johnson">Bob Johnson</option>
+                <option value="Charlie Davis">Charlie Davis</option>
+            </select>
+        </p>
+    </div>
+
+    <div class="info">
+        <table>
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Location</th>
+                    <th>Time</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>John Doe</td>
+                    <td>Library</td>
+                    <td>10:00 AM</td>
+                </tr>
+                <tr>
+                    <td>Jane Smith</td>
+                    <td>Cafeteria</td>
+                    <td>10:15 AM</td>
+                </tr>
+                <tr>
+                    <td>Alice Brown</td>
+                    <td>Classroom 2A</td>
+                    <td>10:30 AM</td>
+                </tr>
+                <tr>
+                    <td>Bob Johnson</td>
+                    <td>Gym</td>
+                    <td>11:00 AM</td>
+                </tr>
+                <tr>
+                    <td>Charlie Davis</td>
+                    <td>Auditorium</td>
+                    <td>11:30 AM</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <footer>
+        <nav>
+            <a href="G_main.html">Home</a>
+            <a href="attendance.html">Attendance</a>
+            <a href="location.html" class="active">Location</a>
+            <a href="schedule.html">Schedule</a>
+        </nav>
+    </footer>
+</body>
+</html>

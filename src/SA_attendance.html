@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Attendance</title>
+    <link rel="stylesheet" href="css/attendance.css">
+</head>
+<body>
+    <header>
+        <img src="img/logo.png" alt="Logo">
+        <h1>Attendance Page</h1>
+    </header>
+
+    <div class="info">
+        <p>
+            <label for="date">Date:</label>
+            <input type="date" id="date" name="date">
+        </p>
+        <p>
+            <label for="class">Class:</label>
+            <select id="class" name="class">
+                <option value="A1">A1</option>
+                <option value="B1">B1</option>
+                <option value="A2">A2</option>
+                <option value="B2">B2</option>
+                <option value="C2">C2</option>
+            </select>
+        </p>
+    </div>
+
+    <div class="info">
+        <table>
+            <thead>
+                <tr>
+                    <th>No</th>
+                    <th>Name</th>
+                    <th>Attendance</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>1</td>
+                    <td>John Doe</td>
+                    <td><input type="checkbox"></td>
+                </tr>
+                <tr>
+                    <td>2</td>
+                    <td>Jane Smith</td>
+                    <td><input type="checkbox"></td>
+                </tr>
+                <tr>
+                    <td>3</td>
+                    <td>Bob Johnson</td>
+                    <td><input type="checkbox"></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="buttons">
+        <a href="summary.html">
+            <img src="img/summary.png" alt="Summary">
+            Summary
+        </a>
+    </div>
+
+    <footer>
+        <nav>
+            <a href="G_main.html">Home</a>
+            <a href="attendance.html" class="active">Attendance</a>
+            <a href="location.html">Location</a>
+            <a href="schedule.html">Schedule</a>
+        </nav>
+    </footer>
+</body>
+</html>
