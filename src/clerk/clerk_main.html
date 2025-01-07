@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Clerk Dashboard</title>
-    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="/sapds/src/css/main.css">
     <script>
         document.addEventListener("DOMContentLoaded", function() {
             fetch('SA_main.php')
@@ -28,7 +28,7 @@
 </head>
 <body>
     <header>
-        <img src="img/logo.png" alt="SAPDS Logo">
+        <img src="/sapds/src/img/logo.png" alt="SAPDS Logo">
         <h1>SAPDS</h1>
     </header>
 
@@ -38,24 +38,24 @@
     </div>
 
     <div class="buttons">
-        <a href="attendance.html">
-            <img src="img/att.webp" alt="Attendance">
+        <a href="C_attendance.html">
+            <img src="/sapds/src/img/att.webp" alt="Attendance">
             Attendance
         </a>
-        <a href="location.html">
-            <img src="img/location.jpg" alt="Location">
+        <a href="C_location.html">
+            <img src="/sapds/src/img/location.jpg" alt="Location">
             Location
         </a>
-        <a href="schedule.html">
-            <img src="img/schedule.jpg" alt="Schedule">
+        <a href="C_schedule.html">
+            <img src="/sapds/src/img/schedule.jpg" alt="Schedule">
             Schedule
         </a>
         <a href="edit.html">
-            <img src="img/edit.png" alt="Edit">
-            Edit
+            <img src="/sapds/src/img/edit.png" alt="Edit">
+            Edit/Add Student
         </a>
         <a href="#" id="logoutButton">
-            <img src="img/logout.webp" alt="Logout">
+            <img src="/sapds/src/img/logout.webp" alt="Logout">
             Logout
         </a>
     </div>
@@ -81,7 +81,7 @@
         }
 
         function confirmLogout() {
-            window.location.href = 'login.html';
+            window.location.href = '/sapds/src/login.html';
         }
     </script>
 </body>

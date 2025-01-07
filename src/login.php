@@ -40,8 +40,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             // Successful login
             $_SESSION['username'] = $user; // Store username in session
             if ($row['role'] == 'school-administrator') {
-                echo "Login successful. Redirecting to school administrator dashboard...";
-                header("refresh:2;url=SA_main.html"); // Redirect to school administrator dashboard
+                if ($row['admin_role'] == 'clerk') {
+                    echo "Login successful. Redirecting to clerk dashboard...";
+                    header("refresh:2;url=clerk/clerk_main.html"); // Redirect to clerk dashboard
+                } else {
+                    echo "Login successful. Redirecting to school administrator dashboard...";
+                    header("refresh:2;url=SA_main.html"); // Redirect to school administrator dashboard
+                }
             } elseif ($row['role'] == 'guardian') {
                 echo "Login successful. Redirecting to guardian dashboard...";
                 header("refresh:2;url=G_main.html"); // Redirect to guardian dashboard
