@@ -164,12 +164,13 @@ input, select { /*for edit clerk*/
     justify-content: center; /* Center the image horizontally */
     margin: 10px;
     width: 100%; /* Ensure the container takes up the full width */
-    height: auto; /* Allow the container to adjust its height */
+    height: 700px; /* Allow the container to adjust its height */
+    padding-top: 50px;
 }
 
 .image-container img {
     max-width: 100%; /* Ensure the image fits within the container */
     max-height: 400px; /* Adjust height as needed */
-    transform: rotate(90deg); /* Rotate the image 90 degrees */
+    transform: rotate(90deg) scale(2.5); /* Rotate the image 90 degrees */
     display: block;
 }
