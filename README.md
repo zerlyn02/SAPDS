@@ -8,4 +8,4 @@ import sapds.sql in xampp
 activate and start xampp
 
 ## Step 3
-Open the files with localhost
+Open the files with localhost starting with src/login.html
