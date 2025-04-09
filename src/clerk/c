@@ -1,0 +1,102 @@
+<?php
+require '../database.php';
+
+$id = $_GET['id'] ?? null;
+
+$pdo = Database::connect();
+$pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+$sql = "SELECT * FROM children WHERE id = ?";
+$q = $pdo->prepare($sql);
+$q->execute([$id]);
+$data = $q->fetch(PDO::FETCH_ASSOC);
+Database::disconnect();
+
+$msg = null;
+if (!$data || !$data['name']) {
+    $msg = "The ID of your Card / KeyChain is not registered !!!";
+    $data = [
+        'id' => $id,
+        'name' => '--------',
+        'gender' => '--------',
+        'email' => '--------',
+        'mobile' => '--------',
+        'ic' => '--------',
+        'age' => '--------',
+        'class' => '--------'
+    ];
+}
+?>
+
+<?php include 'C_readtaguserdata.html'; ?>
+
+<html>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Data</title>
+    <link href="/sapds/src/css/attendance.css" rel="stylesheet">
+</head>
+<body>
+    <header>
+        <img src="/sapds/src/img/logo.png" alt="Logo">
+        <h1>User Information</h1>
+    </header>
+
+    <div class="info">
+        <table>
+            <tr>
+                <td>ID:</td>
+                <td><?php echo $data['id']; ?></td>
+            </tr>
+            <tr>
+                <td>Name:</td>
+                <td><?php echo $data['name']; ?></td>
+            </tr>
+            <tr>
+                <td>Gender:</td>
+                <td><?php echo $data['gender']; ?></td>
+            </tr>
+            <tr>
+                <td>Email:</td>
+                <td><?php echo $data['email']; ?></td>
+            </tr>
+            <tr>
+                <td>Mobile:</td>
+                <td><?php echo $data['mobile']; ?></td>
+            </tr>
+            <tr>
+                <td>IC:</td>
+                <td><?php echo $data['ic']; ?></td>
+            </tr>
+            <tr>
+                <td>Age:</td>
+                <td><?php echo $data['age']; ?></td>
+            </tr>
+            <tr>
+                <td>Class:</td>
+                <td><?php echo $data['class']; ?></td>
+            </tr>
+        </table>
+    </div>
+    
+    
+
+    <?php if (!empty($msg)) : ?>
+        <p style="color:red; text-align:center;"><?php echo $msg; ?></p>
+    <?php endif; ?>
+
+    <footer>
+        <nav>
+            <a href="clerk_main.html">Home</a>
+            <a href="C_attendance.html">Attendance</a>
+            <a href="C_location.html">Location</a>
+            <a href="C_schedule.html">Schedule</a>
+            <a href="edit.html" class="active">Edit</a>
+        </nav>
+    </footer>
+</body>
+</html>
+
+</html>

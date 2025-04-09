@@ -67,7 +67,7 @@ table th {
     margin-top: 20px;
 }
 
-footer {
+/* footer {
     position: fixed;
     bottom: 0;
     width: 100% !important;
@@ -96,7 +96,7 @@ footer nav a:hover {
 footer nav a.active {
     font-weight: bold;
     background-color: #2e3e2f;
-}
+} */
 
 .buttons {
     display: grid;
@@ -174,3 +174,13 @@ input, select { /*for edit clerk*/
     transform: rotate(90deg) scale(2.5); /* Rotate the image 90 degrees */
     display: block;
 }
+
+.table-container {
+    max-width: 100%;
+    overflow-x: auto;
+    margin-top: 20px;
+}
+
+
+
+

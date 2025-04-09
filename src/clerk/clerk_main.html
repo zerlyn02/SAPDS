@@ -7,7 +7,7 @@
     <link rel="stylesheet" href="/sapds/src/css/main.css">
     <script>
         document.addEventListener("DOMContentLoaded", function() {
-            fetch('SA_main.php')
+            fetch('../SA_main.php')
                 .then(response => {
                     if (!response.ok) {
                         throw new Error('Network response was not ok');
@@ -33,8 +33,8 @@
     </header>
 
     <div class="info">
-        <p><strong>Role:</strong> <span id="admin-role">Clerk</span></p>
-        <p><strong>Name:</strong> <span id="admin-name">(name)</span></p>
+        <p><strong>Role:</strong> <span id="admin-role"></span></p>
+        <p><strong>Name:</strong> <span id="admin-name"></span></p>
     </div>
 
     <div class="buttons">
@@ -50,9 +50,21 @@
             <img src="/sapds/src/img/schedule.jpg" alt="Schedule">
             Schedule
         </a>
-        <a href="edit.html">
+        <!-- <a href="edit.html">
             <img src="/sapds/src/img/edit.png" alt="Edit">
             Edit/Add Student
+        </a> -->
+        <a href="C_readtag.php">
+            <img src="/sapds/src/img/edit.png" alt="Edit">
+            Read Tag
+        </a>
+        <a href="C_register.php">
+            <img src="/sapds/src/img/edit.png" alt="Edit">
+            Register
+        </a>
+        <a href="C_userdata.php">
+            <img src="/sapds/src/img/edit.png" alt="Edit">
+            Student Data
         </a>
         <a href="#" id="logoutButton">
             <img src="/sapds/src/img/logout.webp" alt="Logout">
