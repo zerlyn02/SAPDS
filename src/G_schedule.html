@@ -5,12 +5,23 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Schedule</title>
     <link rel="stylesheet" href="css/attendance.css">
+    <link rel="stylesheet" href="/sapds/src/css/navigation.css">
+    <script src="/sapds/src/js/navigation.js"></script>
 </head>
 <body>
     <header>
+        <span style="font-size:30px;cursor:pointer" onclick="openNav()">&#9776;</span>
         <img src="img/logo.png" alt="Logo">
         <h1>Schedule Page</h1>
     </header>
+
+    <div id="mySidenav" class="sidenav">
+        <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+        <a href="G_main.html">Home</a>
+        <a href="G_attendance.html">Attendance</a>
+        <a href="G_location.html">Location</a>
+        <a href="G_schedule.html">Schedule</a>
+    </div>
 
     <div class="info">
         <p>
@@ -24,14 +35,5 @@
         </div>
     </div>
     
-
-    <footer>
-        <nav>
-            <a href="G_main.html">Home</a>
-            <a href="G_attendance.html" >Attendance</a>
-            <a href="G_location.html">Location</a>
-            <a href="G_schedule.html" class="active">Schedule</a>
-        </nav>
-    </footer>
 </body>
 </html>

@@ -5,85 +5,94 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Attendance</title>
     <link rel="stylesheet" href="css/attendance.css">
+    <link rel="stylesheet" href="/sapds/src/css/navigation.css">
+    <script src="/sapds/src/js/navigation.js"></script>
+
 </head>
 <body>
     <header>
+        <span style="font-size:30px;cursor:pointer" onclick="openNav()">&#9776;</span>
         <img src="img/logo.png" alt="Logo">
         <h1>Attendance Page</h1>
     </header>
 
-    <div class="info">
-        <p>
-            <label for="year">Year:</label>
-            <select id="year" name="year">
-                <option value="2020">2020</option>
-                <option value="2021">2021</option>
-                <option value="2022">2022</option>
-                <option value="2023">2023</option>
-                <option value="2024">2024</option>
-                <option value="2025">2025</option>
-            </select>
-        </p>
-        <p>
-            <label for="name">Name: John Doe</label>
-            <!-- <select id="name" name="name">
-                <option value="John Doe">John Doe</option>
-                <option value="Jane Smith">Jane Smith</option>
-                <option value="Bob Johnson">Bob Johnson</option>
-                <option value="Alice Brown">Alice Brown</option>
-                <option value="Charlie Davis">Charlie Davis</option>
-            </select> -->
-        </p>
+    <div id="mySidenav" class="sidenav">
+        <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+        <a href="G_main.html">Home</a>
+        <a href="G_attendance.html">Attendance</a>
+        <a href="G_location.html">Location</a>
+        <a href="G_schedule.html">Schedule</a>
     </div>
 
+    <div class="filter-container" style="text-align: left; margin: 20px;">
+        <form id="filterForm">
+            <label for="start-date">Start Date:</label>
+            <input type="date" id="start-date" name="start_date">
+            <br>
+            <label for="end-date">End Date:</label>
+            <input type="date" id="end-date" name="end_date">
+            
+            <button type="submit">Apply</button>
+        </form>
+    </div>
+    
     <div class="info">
-        <table>
-            <thead>
-                <tr>
-                    <th>No</th>
-                    <th>Date</th>
-                    <th>Attendance</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td>1</td>
-                    <td>2025-01-01</td>
-                    <td><input type="checkbox" checked disabled></td>
-                </tr>
-                <tr>
-                    <td>2</td>
-                    <td>2025-01-02</td>
-                    <td><input type="checkbox" checked disabled></td>
-                </tr>
-                <tr>
-                    <td>3</td>
-                    <td>2025-01-03</td>
-                    <td><input type="checkbox" disabled></td>
-                </tr>
-                <tr>
-                    <td>4</td>
-                    <td>2025-01-04</td>
-                    <td><input type="checkbox" disabled></td>
-                </tr>
-            </tbody>
-        </table>
+        <div id="table-container">
+          <!-- Table will be loaded here -->
+        </div>
     </div>
 
     <div class="buttons">
-        <a href="summary.html">
-            <img src="img/summary.png" alt="Summary">
-            Summary
-        </a>
+        <form id="summaryForm" action="G_generate_pdf.php" method="GET" target="_blank">
+            <input type="hidden" name="date" id="summary-date">
+            <button type="submit" style="background:none;border:none;padding:0;cursor:pointer;">
+                <img src="img/summary.png" alt="Summary">
+                Summary
+            </button>
+        </form>
     </div>
 
-    <footer>
-        <nav>
-            <a href="G_main.html">Home</a>
-            <a href="G_attendance.html" class="active">Attendance</a>
-            <a href="G_location.html">Location</a>
-            <a href="G_schedule.html">Schedule</a>
-        </nav>
-    </footer>
+
+<script>
+    function loadAttendance(startDate = '', endDate = '') {
+        const params = new URLSearchParams();
+        if (startDate) params.append('start_date', startDate);
+        if (endDate) params.append('end_date', endDate);
+
+        fetch('G_get_attendance.php?' + params.toString())
+            .then(response => response.text())
+            .then(data => {
+                document.getElementById('table-container').innerHTML = data;
+            })
+            .catch(error => {
+                document.getElementById('table-container').innerHTML = '<p>Error loading attendance data.</p>';
+                console.error('Error:', error);
+            });
+    }
+
+    // Initial load
+    loadAttendance();
+
+    document.getElementById('filterForm').addEventListener('submit', function (e) {
+        e.preventDefault();
+        const startDate = document.getElementById('start-date').value;
+        const endDate = document.getElementById('end-date').value;
+        loadAttendance(startDate, endDate);
+    });
+
+
+    document.getElementById('filterForm').addEventListener('submit', function(e) {
+        e.preventDefault();
+        const date = document.getElementById('filter-date').value;
+        document.getElementById('summary-date').value = date; // set date for PDF
+        loadAttendance(date);
+    });
+
+    document.addEventListener('DOMContentLoaded', () => {
+        document.getElementById('summary-date').value = document.getElementById('filter-date').value;
+    });
+
+</script>
+
 </body>
 </html>

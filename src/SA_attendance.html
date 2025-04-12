@@ -2,76 +2,73 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Attendance</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="css/attendance.css">
+    <link rel="stylesheet" href="/sapds/src/css/navigation.css">
+    <script src="/sapds/src/js/navigation.js"></script>
 </head>
 <body>
     <header>
+        <span style="font-size:30px;cursor:pointer" onclick="openNav()">&#9776;</span>
         <img src="img/logo.png" alt="Logo">
         <h1>Attendance Page</h1>
     </header>
 
-    <div class="info">
-        <p>
-            <label for="date">Date:</label>
-            <input type="date" id="date" name="date">
-        </p>
-        <p>
-            <label for="class">Class:</label>
-            <select id="class" name="class">
-                <option value="A1">A1</option>
-                <option value="B1">B1</option>
-                <option value="A2">A2</option>
-                <option value="B2">B2</option>
-                <option value="C2">C2</option>
-            </select>
-        </p>
+    <div id="mySidenav" class="sidenav">
+        <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+        <a href="SA_main.html">Home</a>
+        <a href="SA_attendance.html">Attendance</a>
+        <a href="SA_location.html">Location</a>
+        <a href="SA_schedule.html">Schedule</a>
     </div>
 
     <div class="info">
-        <table>
-            <thead>
-                <tr>
-                    <th>No</th>
-                    <th>Name</th>
-                    <th>Attendance</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td>1</td>
-                    <td>John Doe</td>
-                    <td><input type="checkbox"></td>
-                </tr>
-                <tr>
-                    <td>2</td>
-                    <td>Jane Smith</td>
-                    <td><input type="checkbox"></td>
-                </tr>
-                <tr>
-                    <td>3</td>
-                    <td>Bob Johnson</td>
-                    <td><input type="checkbox"></td>
-                </tr>
-            </tbody>
-        </table>
+        <h2>Present Children</h2>
+        <form id="attendanceForm">
+            <div id="present-container">
+                <!-- Present attendance table loads here -->
+            </div>
+            <br>
+            <hr>
+            <h2>Absent Children</h2>
+            <div id="absent-container">
+                <!-- Absent children checkboxes load here -->
+            </div>
+            <br>
+            <button type="submit">Submit Manual Attendance</button>
+        </form>
     </div>
 
-    <div class="buttons">
-        <a href="summary.html">
-            <img src="img/summary.png" alt="Summary">
-            Summary
-        </a>
-    </div>
+    <script>
+        function loadAttendance() {
+            fetch('SA_get_attendance.php')
+                .then(response => response.text())
+                .then(data => {
+                    const parser = new DOMParser();
+                    const doc = parser.parseFromString(data, 'text/html');
 
-    <footer>
-        <nav>
-            <a href="SA_main.html">Home</a>
-            <a href="SA_attendance.html" class="active">Attendance</a>
-            <a href="SA_location.html">Location</a>
-            <a href="SA_schedule.html" >Schedule</a>
-        </nav>
-    </footer>
+                    document.getElementById('present-container').innerHTML = doc.getElementById('present-table').outerHTML;
+                    document.getElementById('absent-container').innerHTML = doc.getElementById('absent-list').outerHTML;
+                });
+        }
+
+        document.getElementById('attendanceForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const formData = new FormData(this);
+
+            fetch('SA_get_attendance.php', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.text())
+            .then(data => {
+                alert('Manual attendance updated!');
+                loadAttendance();
+            });
+        });
+
+        window.onload = loadAttendance;
+    </script>
 </body>
 </html>

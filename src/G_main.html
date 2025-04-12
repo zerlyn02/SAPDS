@@ -18,8 +18,10 @@
                     if (data.message) {
                         console.error(data.message);
                     } else {
-                        document.getElementById('guardian-name').textContent = data.name;
+                        document.getElementById('guardian-name').textContent = data.guardian_name;
                         document.getElementById('child-name').textContent = data.child_name;
+                        document.getElementById('child-class').textContent = data.class;
+
                     }
                 })
                 .catch(error => console.error('Error fetching data:', error));
@@ -35,7 +37,7 @@
     <div class="info">
         <p><strong>Guardian:</strong> <span id="guardian-name">(name)</span></p>
         <p><strong>Child:</strong> <span id="child-name">(name)</span></p>
-        <p><strong>Class:</strong> (name)</p>
+        <p><strong>Class:</strong> <span id="child-class">Child is not registered!</span></p>
     </div>
 
     <div class="buttons">

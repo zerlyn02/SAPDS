@@ -26,8 +26,13 @@ if (!isset($_SESSION['username'])) {
 
 $user = $_SESSION['username'];
 
-// Query to fetch guardian data
-$sql = "SELECT name, child_name FROM users WHERE username = ?";
+$sql = "
+    SELECT u.name AS guardian_name, u.child_name, c.class 
+    FROM users u
+    JOIN children c ON u.child_name = c.name
+    WHERE u.username = ?
+";
+
 $stmt = $conn->prepare($sql);
 if (!$stmt) {
     die("Prepare statement failed: " . $conn->error);
