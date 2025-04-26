@@ -6,8 +6,8 @@
     <title>Attendance</title>
     <link rel="stylesheet" href="css/attendance.css">
     <link rel="stylesheet" href="/sapds/src/css/navigation.css">
+    <link rel="stylesheet" href="/sapds/src/css/modal.css">
     <script src="/sapds/src/js/navigation.js"></script>
-
 </head>
 <body>
     <header>
@@ -43,17 +43,66 @@
     </div>
 
     <div class="buttons">
-        <form id="summaryForm" action="G_generate_pdf.php" method="GET" target="_blank">
-            <input type="hidden" name="date" id="summary-date">
-            <button type="submit" style="background:none;border:none;padding:0;cursor:pointer;">
-                <img src="img/summary.png" alt="Summary">
-                Summary
-            </button>
-        </form>
+        <a href="#">
+            <img src="/sapds/src/img/summary.png" alt="Generate PDF" onclick="openModal()">
+            Generate PDF
+        </a>
+    </div>
+    
+    <!-- Modal -->
+    <div id="pdfModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal()">&times;</span>
+            <h2>Generate Attendance PDF</h2>
+            <form id="pdfForm">
+                <label for="pdfType">Select Type:</label>
+                <select id="pdfType" name="pdfType">
+                    <option value="daily">Daily</option>
+                    <option value="monthly">Monthly</option>
+                    <option value="yearly">Yearly</option>
+                </select>
+                <br><br>
+                <div id="daily-options">
+                    <label for="day">Choose Day:</label>
+                    <input type="date" id="day" name="day">
+                </div>
+                <div id="monthly-options" style="display:none;">
+                    <label for="month">Choose Month:</label>
+                    <input type="month" id="month" name="month">
+                </div>
+                <div id="yearly-options" style="display:none;">
+                    <label for="year">Choose Year:</label>
+                    <input type="number" id="year" name="year" min="2000" max="2099">
+                </div>
+                <br><br>
+                <button type="submit">Generate PDF</button>
+            </form>
+        </div>
     </div>
 
-
 <script>
+    function openModal() {
+        document.getElementById('pdfModal').style.display = 'block';
+    }
+
+    function closeModal() {
+        document.getElementById('pdfModal').style.display = 'none';
+    }
+
+    document.getElementById('pdfType').addEventListener('change', function () {
+        const pdfType = this.value;
+        document.getElementById('daily-options').style.display = pdfType === 'daily' ? 'block' : 'none';
+        document.getElementById('monthly-options').style.display = pdfType === 'monthly' ? 'block' : 'none';
+        document.getElementById('yearly-options').style.display = pdfType === 'yearly' ? 'block' : 'none';
+    });
+
+    document.getElementById('filterForm').addEventListener('submit', function (e) {
+        e.preventDefault();
+        const startDate = document.getElementById('start-date').value;
+        const endDate = document.getElementById('end-date').value;
+        loadAttendance(startDate, endDate);
+    });
+
     function loadAttendance(startDate = '', endDate = '') {
         const params = new URLSearchParams();
         if (startDate) params.append('start_date', startDate);
@@ -73,25 +122,33 @@
     // Initial load
     loadAttendance();
 
-    document.getElementById('filterForm').addEventListener('submit', function (e) {
+    document.getElementById('pdfForm').addEventListener('submit', function (e) {
         e.preventDefault();
-        const startDate = document.getElementById('start-date').value;
-        const endDate = document.getElementById('end-date').value;
-        loadAttendance(startDate, endDate);
+        
+        const pdfType = document.getElementById('pdfType').value;
+        let dateParam = '';
+        
+        if (pdfType === 'daily') {
+            dateParam = document.getElementById('day').value;
+        } else if (pdfType === 'monthly') {
+            dateParam = document.getElementById('month').value;
+        } else if (pdfType === 'yearly') {
+            dateParam = document.getElementById('year').value;
+        }
+
+        // Make sure 'child_name' is passed. If it's hardcoded or needs to come from a specific field, ensure it's included
+        const childName = 'abu'; // This is where you can dynamically get the child's name if needed
+
+        // Send the data as a GET request, which your PHP script expects
+        const url = 'G_generatepdf.php?' + new URLSearchParams({
+            type: pdfType,
+            date: dateParam,
+            child_name: childName
+        }).toString();
+
+        window.open(url, '_blank');
+        closeModal();
     });
-
-
-    document.getElementById('filterForm').addEventListener('submit', function(e) {
-        e.preventDefault();
-        const date = document.getElementById('filter-date').value;
-        document.getElementById('summary-date').value = date; // set date for PDF
-        loadAttendance(date);
-    });
-
-    document.addEventListener('DOMContentLoaded', () => {
-        document.getElementById('summary-date').value = document.getElementById('filter-date').value;
-    });
-
 </script>
 
 </body>

@@ -18,8 +18,8 @@ MFRC522 mfrc522(SS_PIN, RST_PIN);  //--> Create MFRC522 instance.
 #define ON_Board_LED 2  //--> Defining an On Board LED, used for indicators when the process of connecting to a wifi router
 
 //----------------------------------------SSID and Password of your WiFi router-------------------------------------------------------------------------------------------------------------//
-const char* ssid = "myUUM-Guest";
-// const char* password = "hahahaha";
+const char* ssid = "potatohaochi";
+const char* password = "hahahaha";
 //------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------//
 
 ESP8266WebServer server(80);  //--> Server on port 80
@@ -37,7 +37,7 @@ void setup() {
 
   delay(500);
 
-  WiFi.begin(ssid); //--> Connect to your WiFi router
+  WiFi.begin(ssid,password); //--> Connect to your WiFi router
   Serial.println("");
 
   pinMode(ON_Board_LED, OUTPUT);
@@ -90,7 +90,7 @@ void loop() {
     //Post Data
     postData = "UIDresult=" + UIDresultSend;
 
-    http.begin(client,"http://10.144.150.17/SAPDS/src/clerk/getUID.php");  //Specify request destination
+    http.begin(client,"http://18.143.66.54/sapds/src/clerk/getUID.php");  //Specify request destination
     http.addHeader("Content-Type", "application/x-www-form-urlencoded"); //Specify content-type header
 
     int httpCode = http.POST(postData);   //Send the request

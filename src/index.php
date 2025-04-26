@@ -1,11 +1,16 @@
 <?php
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
+
 session_start();
 
 // Database configuration
-$host = 'localhost'; // Replace with your database host
+$host = 'localhost';
 $dbName = 'sapds'; // Replace with your database name
 $username = 'root'; // Replace with your database username
 $password = ''; // Replace with your database password
+// $port = '3306';
+
 
 // Connect to the database
 $conn = new mysqli($host, $username, $password, $dbName);

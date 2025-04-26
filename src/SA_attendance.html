@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="css/attendance.css">
     <link rel="stylesheet" href="/sapds/src/css/navigation.css">
+    <link rel="stylesheet" href="/sapds/src/css/modal.css">
     <script src="/sapds/src/js/navigation.js"></script>
 </head>
 <body>
@@ -39,36 +40,92 @@
             <button type="submit">Submit Manual Attendance</button>
         </form>
     </div>
+    
+    <!-- Generate PDF Button -->
+    <div class="buttons">
+    <a>
+        <img src="/sapds/src/img/summary.png" alt="Generate PDF" onclick="openModal()">
+        Generate PDF
+    </a>
+    </div>
+        
+    <!-- Modal for PDF generation -->
+    <div id="pdfModal" class="modal">
+      <div class="modal-content">
+        <span class="close" onclick="closeModal()">&times;</span>
+        <h2>Generate Attendance PDF</h2>
+        <form id="pdfForm">
+          <label for="startDate">Start Date:</label>
+          <input type="date" id="startDate" name="startDate" required>
+          <br><br>
+          <label for="endDate">End Date:</label>
+          <input type="date" id="endDate" name="endDate">
+          <br><br>
+          <button type="submit">Generate PDF</button>
+        </form>
+      </div>
+    </div>
+
 
     <script>
-        function loadAttendance() {
-            fetch('SA_get_attendance.php')
-                .then(response => response.text())
-                .then(data => {
-                    const parser = new DOMParser();
-                    const doc = parser.parseFromString(data, 'text/html');
-
-                    document.getElementById('present-container').innerHTML = doc.getElementById('present-table').outerHTML;
-                    document.getElementById('absent-container').innerHTML = doc.getElementById('absent-list').outerHTML;
-                });
-        }
-
-        document.getElementById('attendanceForm').addEventListener('submit', function(e) {
-            e.preventDefault();
-            const formData = new FormData(this);
-
-            fetch('SA_get_attendance.php', {
-                method: 'POST',
-                body: formData
-            })
+    function loadAttendance() {
+        fetch('SA_get_attendance.php')
             .then(response => response.text())
             .then(data => {
-                alert('Manual attendance updated!');
-                loadAttendance();
+                const parser = new DOMParser();
+                const doc = parser.parseFromString(data, 'text/html');
+    
+                document.getElementById('present-container').innerHTML = doc.getElementById('present-table').outerHTML;
+                document.getElementById('absent-container').innerHTML = doc.getElementById('absent-list').outerHTML;
             });
+    }
+    
+    document.getElementById('attendanceForm').addEventListener('submit', function(e) {
+        e.preventDefault();
+        
+        // Correct: manually collect checked checkboxes
+        const checkedBoxes = document.querySelectorAll('#absent-container input[name="mark_attendance[]"]:checked');
+        const formData = new FormData();
+    
+        checkedBoxes.forEach(box => {
+            formData.append('mark_attendance[]', box.value);
         });
+    
+        fetch('SA_get_attendance.php', {
+            method: 'POST',
+            body: formData
+        })
+        .then(response => response.text())
+        .then(data => {
+            alert('Manual attendance updated!');
+            loadAttendance(); // Reload updated attendance
+        })
+        .catch(error => {
+            console.error('Error submitting attendance:', error);
+        });
+    });
+    
+    // Important to call on page load
+    window.onload = loadAttendance;
+    
+    function openModal() {
+        document.getElementById("pdfModal").style.display = "block";
+    }
+    
+    function closeModal() {
+        document.getElementById("pdfModal").style.display = "none";
+    }
+    
+    // Submit PDF form
+    document.getElementById('pdfForm').addEventListener('submit', function(e) {
+        e.preventDefault();
+        const startDate = document.getElementById('startDate').value;
+        const endDate = document.getElementById('endDate').value || startDate;
+        
+        const url = `/sapds/src/generate_pdf.php?startDate=${startDate}&endDate=${endDate}`;
+        window.open(url, '_blank');
+    });
 
-        window.onload = loadAttendance;
     </script>
 </body>
 </html>

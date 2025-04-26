@@ -56,19 +56,14 @@
                                 <td><?php echo htmlspecialchars($data['name']); ?></td>
                             </tr>
                             <tr>
-                                <td>Gender</td>
-                                <td>:</td>
-                                <td><?php echo htmlspecialchars($data['gender']); ?></td>
-                            </tr>
-                            <tr>
-                                <td>Mobile Number (If available)</td>
-                                <td>:</td>
-                                <td><?php echo htmlspecialchars($data['mobile']); ?></td>
-                            </tr>
-                            <tr>
                                 <td>IC Number</td>
                                 <td>:</td>
                                 <td><?php echo htmlspecialchars($data['ic']); ?></td>
+                            </tr>
+                            <tr>
+                                <td>Gender</td>
+                                <td>:</td>
+                                <td><?php echo htmlspecialchars($data['gender']); ?></td>
                             </tr>
                             <tr>
                                 <td>Age</td>
@@ -79,6 +74,11 @@
                                 <td>Class</td>
                                 <td>:</td>
                                 <td><?php echo htmlspecialchars($data['class']); ?></td>
+                            </tr>
+                            <tr>
+                                <td>Mobile Number (If available)</td>
+                                <td>:</td>
+                                <td><?php echo htmlspecialchars($data['mobile']); ?></td>
                             </tr>
                         </table>
                     </td>

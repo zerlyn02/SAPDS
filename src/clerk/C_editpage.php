@@ -1,4 +1,6 @@
 <?php
+session_start();
+
     require '../database.php';
     $id = null;
     if ( !empty($_GET['id'])) {
@@ -14,14 +16,14 @@
 	Database::disconnect();
 ?>
 
+
 <!DOCTYPE html>
 <html lang="en">
-<html>
 	<head>
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
 		<meta charset="utf-8">
         <link rel="stylesheet" href="/sapds/src/css/attendance.css">
-		<script src="/sapds/src/js/bootstrap.min.js"></script>
+		<!-- <script src="/sapds/src/js/bootstrap.min.js"></script> -->
 		
 	</head>
 	
@@ -44,14 +46,14 @@
                     <div>
                         <label>RFID ID</label>
                         <div>
-                            <input name="id" type="text"  placeholder="" value="<?php echo $data['id'];?>" readonly>
+                            <input name="rfid" type="text"  placeholder="" value="<?php echo $data['id'];?>" readonly>
                         </div>
                     </div>
                     
                     <div>
                         <label>Student IC Number</label>
                         <div>
-                            <input name="name" type="text"  placeholder="" value="<?php echo $data['ic'];?>" required>
+                            <input name="ic" type="text"  placeholder="" value="<?php echo $data['ic'];?>" required>
                         </div>
                     </div>
 
@@ -75,14 +77,14 @@
                     <div>
                         <label>Student Age</label>
                         <div>
-                            <input name="mobile" type="text"  placeholder="" value="<?php echo $data['age'];?>" required>
+                            <input name="age" type="text"  placeholder="" value="<?php echo $data['age'];?>" required>
                         </div>
                     </div>
 
                     <div>
                         <label>Class</label>
                         <div>
-                            <input name="mobile" type="text"  placeholder="" value="<?php echo $data['class'];?>" required>
+                            <input name="class" type="text"  placeholder="" value="<?php echo $data['class'];?>" required>
                         </div>
                     </div>
 

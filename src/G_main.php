@@ -29,7 +29,7 @@ $user = $_SESSION['username'];
 $sql = "
     SELECT u.name AS guardian_name, u.child_name, c.class 
     FROM users u
-    JOIN children c ON u.child_name = c.name
+    LEFT JOIN children c ON u.child_name = c.name
     WHERE u.username = ?
 ";
 
@@ -43,8 +43,19 @@ $result = $stmt->get_result();
 
 $data = $result->fetch_assoc();
 
+// If no data is found, set default values for child
+if (!$data || !$data['child_name']) {
+    $data = [
+        'guardian_name' => 'Guardian Name Not Found',
+        'child_name' => 'Child is not registered!',
+        'class' => 'N/A',
+    ];
+}
+
 $stmt->close();
 $conn->close();
 
+// Return data as JSON
 echo json_encode($data);
+
 ?>

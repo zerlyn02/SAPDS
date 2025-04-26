@@ -93,9 +93,8 @@
             </select>
             <select id="classFilter" onchange="filterTable()">
                 <option value="">Filter by Class</option>
-                <option value="Class A">Class A1</option>
-                <option value="Class B">Class B1</option>
-                <!-- Add other classes as necessary -->
+                <option value="A1">Class A1</option>
+                <option value="B1">Class B1</option>
             </select>
         </div>
 
@@ -153,7 +152,7 @@
             tr = table.getElementsByTagName('tr');
 
             for (i = 1; i < tr.length; i++) {
-                td = tr[i].getElementsByTagName('td')[0]; // search by name (first column)
+                td = tr[i].getElementsByTagName('td')[1]; // search by name (first column)
                 if (td) {
                     txtValue = td.textContent || td.innerText;
                     if (txtValue.toUpperCase().indexOf(filter) > -1) {
@@ -177,7 +176,7 @@
                 td = tr[i].getElementsByTagName('td');
                 if (td) {
                     gender = td[3].textContent || td[3].innerText; // Gender column
-                    classValue = td[7].textContent || td[7].innerText; // Class column
+                    classValue = td[5].textContent || td[5].innerText; // Class column
                     if ((gender.toUpperCase().indexOf(genderFilter) > -1 || genderFilter === '') && 
                         (classValue.toUpperCase().indexOf(classFilter) > -1 || classFilter === '')) {
                         tr[i].style.display = "";

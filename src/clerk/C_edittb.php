@@ -1,18 +1,32 @@
 <?php
     require '../database.php';
-    $id = null;
-    if ( !empty($_GET['id'])) {
-        $id = $_REQUEST['id'];
+
+    // Check if the form has been submitted
+    if ($_SERVER["REQUEST_METHOD"] == "POST") {
+        // Collect form data
+        $id = $_GET['id'];
+        $ic = $_POST['ic'];
+        $name = $_POST['name'];
+        $gender = $_POST['gender'];
+        $age = $_POST['age'];
+        $class = $_POST['class'];
+        $mobile = $_POST['mobile'];
+
+        // Connect to the database
+        $pdo = Database::connect();
+        $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+
+        // Update the record
+        $sql = "UPDATE children SET ic = ?, name = ?, gender = ?, age = ?, class = ?, mobile = ? WHERE id = ?";
+        $q = $pdo->prepare($sql);
+        $q->execute(array($ic, $name, $gender, $age, $class, $mobile, $id));
+
+        // Redirect after updating
+        Database::disconnect();
+        header("Location: C_userdata.php");
     }
-     
-    $pdo = Database::connect();
-	$pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-	$sql = "SELECT * FROM children where id = ?";
-	$q = $pdo->prepare($sql);
-	$q->execute(array($id));
-	$data = $q->fetch(PDO::FETCH_ASSOC);
-	Database::disconnect();
 ?>
+
 
 <!DOCTYPE html>
 <html lang="en">
@@ -21,7 +35,7 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
 		<meta charset="utf-8">
         <link rel="stylesheet" href="/sapds/src/css/attendance.css">
-		<script src="/sapds/src/js/bootstrap.min.js"></script>
+		<!-- <script src="/sapds/src/js/bootstrap.min.js"></script> -->
 		
 	</head>
 	
@@ -51,7 +65,7 @@
                     <div>
                         <label>Student IC Number</label>
                         <div>
-                            <input name="name" type="text"  placeholder="" value="<?php echo $data['ic'];?>" required>
+                            <input name="ic" type="text"  placeholder="" value="<?php echo $data['ic'];?>" required>
                         </div>
                     </div>
 
@@ -75,21 +89,21 @@
                     <div>
                         <label>Student Age</label>
                         <div>
-                            <input name="mobile" type="text"  placeholder="" value="<?php echo $data['age'];?>" required>
+                            <input name="age" type="text"  placeholder="" value="<?php echo $data['age'];?>" required>
                         </div>
                     </div>
 
                     <div>
                         <label>Class</label>
                         <div>
-                            <input name="mobile" type="text"  placeholder="" value="<?php echo $data['class'];?>" required>
+                            <input name="class" type="text"  placeholder="" value="<?php echo $data['class'];?>" required>
                         </div>
                     </div>
 
                     <div>
                         <label>Mobile Number (If available)</label>
                         <div>
-                            <input name="mobile" type="text"  placeholder="" value="<?php echo $data['mobile'];?>" required>
+                            <input name="mobile" type="text"  placeholder="" value="<?php echo $data['mobile'];?>">
                         </div>
                     </div>
                     

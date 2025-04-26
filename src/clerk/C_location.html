@@ -5,87 +5,111 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Location</title>
     <link rel="stylesheet" href="/sapds/src/css/attendance.css">
-    <script>
-        // Function to filter table rows based on selected name
-        function filterTable() {
-            const selectedName = document.getElementById("student").value;
-            const tableRows = document.querySelectorAll("tbody tr");
-
-            tableRows.forEach(row => {
-                const nameCell = row.querySelector("td:first-child").textContent;
-                // Show or hide rows based on selection
-                row.style.display = (selectedName === "All" || nameCell === selectedName) ? "" : "none";
-            });
-        }
-    </script>
+    <link rel="stylesheet" href="/sapds/src/css/navigation.css">
+    <script src="/sapds/src/js/navigation.js"></script>
 </head>
 <body>
     <header>
+        <span style="font-size:30px;cursor:pointer" onclick="openNav()">&#9776;</span>
         <img src="/sapds/src/img/logo.png" alt="Logo">
         <h1>Location Page</h1>
     </header>
 
-    <div class="info">
-        <p>
-            <label for="student">Student:</label>
-            <select id="student" name="student" onchange="filterTable()">
-                <option value="All">All</option>
-                <option value="John Doe">John Doe</option>
-                <option value="Jane Smith">Jane Smith</option>
-                <option value="Alice Brown">Alice Brown</option>
-                <option value="Bob Johnson">Bob Johnson</option>
-                <option value="Charlie Davis">Charlie Davis</option>
-            </select>
-        </p>
+    <div id="mySidenav" class="sidenav">
+        <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+        <a href="clerk_main.html">Home</a>
+        <a href="C_attendance.html">Attendance</a>
+        <a href="C_location.html">Location</a>
+        <a href="C_schedule.html">Schedule</a>
+        <a href="C_readtag.php">Read RFID Tag</a>
+        <a href="C_register.php">Register</a>
+        <a href="C_userdata.php">Student list</a>
     </div>
 
     <div class="info">
-        <table>
+        <div class="search-container">
+            <input type="text" id="searchInput" onkeyup="searchTable()" placeholder="Search for names..">
+            <select id="classFilter" onchange="filterTable()">
+                <option value="">Filter by Class</option>
+                <option value="A1">Class A1</option>
+                <option value="B1">Class B1</option>
+                <!-- Add other classes as necessary -->
+            </select>
+        </div>
+
+        <table id="location-table" style="font-size: 14px;">
             <thead>
                 <tr>
                     <th>Name</th>
-                    <th>Location</th>
+                    <th>Class</th>
+                    <th>Date</th>
                     <th>Time</th>
+                    <th>Location</th>
                 </tr>
             </thead>
             <tbody>
-                <tr>
-                    <td>John Doe</td>
-                    <td>Library</td>
-                    <td>10:00 AM</td>
-                </tr>
-                <tr>
-                    <td>Jane Smith</td>
-                    <td>Cafeteria</td>
-                    <td>10:15 AM</td>
-                </tr>
-                <tr>
-                    <td>Alice Brown</td>
-                    <td>Classroom 2A</td>
-                    <td>10:30 AM</td>
-                </tr>
-                <tr>
-                    <td>Bob Johnson</td>
-                    <td>Gym</td>
-                    <td>11:00 AM</td>
-                </tr>
-                <tr>
-                    <td>Charlie Davis</td>
-                    <td>Auditorium</td>
-                    <td>11:30 AM</td>
-                </tr>
+                <!-- Data will be filled in by JavaScript -->
             </tbody>
-        </table>
+        </table>        
     </div>
 
-    <footer>
-        <nav>
-            <a href="clerk_main.html">Home</a>
-            <a href="C_attendance.html">Attendance</a>
-            <a href="C_location.html" class="active">Location</a>
-            <a href="C_schedule.html">Schedule</a>
-            <a href="edit.html" >Edit</a>
-        </nav>
-    </footer>
+    <script>
+
+        document.addEventListener("DOMContentLoaded", function () {
+            fetch("../SA_location.php")
+                .then(res => res.json())
+                .then(locData => {
+                    if (locData.success) {
+                        const tableBody = document.querySelector("#location-table tbody");
+                        const nameSelect = document.getElementById("student");
+                        const nameSet = new Set();
+
+                        tableBody.innerHTML = '';
+
+                        locData.data.forEach(row => {
+                            nameSet.add(row.name);
+                            const tr = document.createElement("tr");
+                            tr.innerHTML = `
+                                <td>${row.name}</td>
+                                <td>${row.class}</td>
+                                <td>${row.date}</td>
+                                <td>${row.time.slice(0, 8)}</td>
+                                <td>${row.location}</td>
+                            `;
+                            tableBody.appendChild(tr);
+                        });
+
+                    } else {
+                        console.error(locData.message);
+                    }
+                });
+        });
+
+        // Search function
+        function searchTable() {
+            const input = document.getElementById('searchInput').value.toUpperCase();
+            const rows = document.querySelectorAll('#location-table tbody tr');
+
+            rows.forEach(row => {
+                const name = row.cells[0].textContent.toUpperCase();
+                row.style.display = name.includes(input) ? '' : 'none';
+            });
+        }
+
+        // Filter function for Class
+        function filterTable() {
+            const classFilter = document.getElementById('classFilter').value.toUpperCase();
+            const rows = document.querySelectorAll('#location-table tbody tr');
+
+            rows.forEach(row => {
+                const classVal = row.cells[1].textContent.toUpperCase(); // Correct index for Class column (index 1)
+
+                const classMatch = !classFilter || classVal === classFilter;
+
+                row.style.display = classMatch ? '' : 'none';
+            });
+        }
+
+    </script>
 </body>
 </html>

@@ -58,29 +58,23 @@
         <tr>
             <td>
                 <table>
-                <tr>
+                	<tr>
                         <td>RFID ID</td>
                         <td>:</td>
                         <td>--------</td>
                     </tr>
-                <tr>
+                	<tr>
                         <td>Name</td>
                         <td>:</td>
                         <td>--------</td>
                     </tr>
-                    
+					<tr>
+                        <td>IC Number</td>
+                        <td>:</td>
+                        <td>--------</td>
+                    </tr>
                     <tr>
                         <td>Gender</td>
-                        <td>:</td>
-                        <td>--------</td>
-                    </tr>
-                    <tr>
-                        <td>Mobile Number (If available)</td>
-                        <td>:</td>
-                        <td>--------</td>
-                    </tr>
-                    <tr>
-                        <td>IC Number</td>
                         <td>:</td>
                         <td>--------</td>
                     </tr>
@@ -91,6 +85,11 @@
                     </tr>
                     <tr>
                         <td>Class</td>
+                        <td>:</td>
+                        <td>--------</td>
+                    </tr>
+					<tr>
+                        <td>Mobile Number (If available)</td>
                         <td>:</td>
                         <td>--------</td>
                     </tr>

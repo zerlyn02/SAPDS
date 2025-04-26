@@ -2,77 +2,132 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Attendance</title>
-    <link rel="stylesheet" href="/sapds/src/css/attendance.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../css/attendance.css">
+    <link rel="stylesheet" href="/sapds/src/css/navigation.css">
+    <script src="/sapds/src/js/navigation.js"></script>
 </head>
 <body>
     <header>
-        <img src="/sapds/src/img/logo.png" alt="Logo">
+        <span style="font-size:30px;cursor:pointer" onclick="openNav()">&#9776;</span>
+        <img src="../img/logo.png" alt="Logo">
         <h1>Attendance Page</h1>
     </header>
 
-    <div class="info">
-        <p>
-            <label for="date">Date:</label>
-            <input type="date" id="date" name="date">
-        </p>
-        <p>
-            <label for="class">Class:</label>
-            <select id="class" name="class">
-                <option value="A1">A1</option>
-                <option value="B1">B1</option>
-                <option value="A2">A2</option>
-                <option value="B2">B2</option>
-                <option value="C2">C2</option>
-            </select>
-        </p>
+    <div id="mySidenav" class="sidenav">
+        <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+        <a href="clerk_main.html">Home</a>
+        <a href="C_attendance.html">Attendance</a>
+        <a href="C_location.html">Location</a>
+        <a href="C_schedule.html">Schedule</a>
+        <a href="C_readtag.php">Read RFID Tag</a>
+        <a href="C_register.php">Register</a>
+        <a href="C_userdata.php">Student list</a>
     </div>
 
     <div class="info">
-        <table>
-            <thead>
-                <tr>
-                    <th>No</th>
-                    <th>Name</th>
-                    <th>Attendance</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td>1</td>
-                    <td>John Doe</td>
-                    <td><input type="checkbox"></td>
-                </tr>
-                <tr>
-                    <td>2</td>
-                    <td>Jane Smith</td>
-                    <td><input type="checkbox"></td>
-                </tr>
-                <tr>
-                    <td>3</td>
-                    <td>Bob Johnson</td>
-                    <td><input type="checkbox"></td>
-                </tr>
-            </tbody>
-        </table>
+        <h2>Present Children</h2>
+        <form id="attendanceForm">
+            <div id="present-container">
+                <!-- Present attendance table loads here -->
+            </div>
+            <br>
+            <hr>
+            <h2>Absent Children</h2>
+            <div id="absent-container">
+                <!-- Absent children checkboxes load here -->
+            </div>
+            <br>
+            <button type="submit">Submit Manual Attendance</button>
+        </form>
     </div>
-
+    
+    <!-- Generate PDF Button -->
     <div class="buttons">
-        <a href="summary.html">
-            <img src="/sapds/src/img/summary.png" alt="Summary">
-            Summary
-        </a>
+    <a>
+        <img src="/sapds/src/img/summary.png" alt="Generate PDF" onclick="openModal()">
+        Generate PDF
+    </a>
+    </div>
+        
+    <!-- Modal for PDF generation -->
+    <div id="pdfModal" class="modal">
+      <div class="modal-content">
+        <span class="close" onclick="closeModal()">&times;</span>
+        <h2>Generate Attendance PDF</h2>
+        <form id="pdfForm">
+          <label for="startDate">Start Date:</label>
+          <input type="date" id="startDate" name="startDate" required>
+          <br><br>
+          <label for="endDate">End Date:</label>
+          <input type="date" id="endDate" name="endDate">
+          <br><br>
+          <button type="submit">Generate PDF</button>
+        </form>
+      </div>
     </div>
 
-    <footer>
-        <nav>
-            <a href="clerk_main.html">Home</a>
-            <a href="C_attendance.html" class="active">Attendance</a>
-            <a href="C_location.html">Location</a>
-            <a href="C_schedule.html">Schedule</a>
-            <a href="edit.html" >Edit</a>
-        </nav>
-    </footer>
+
+    <script>
+    function loadAttendance() {
+        fetch('/sapds/src/SA_get_attendance.php')
+            .then(response => response.text())
+            .then(data => {
+                const parser = new DOMParser();
+                const doc = parser.parseFromString(data, 'text/html');
+    
+                document.getElementById('present-container').innerHTML = doc.getElementById('present-table').outerHTML;
+                document.getElementById('absent-container').innerHTML = doc.getElementById('absent-list').outerHTML;
+            });
+    }
+    
+    document.getElementById('attendanceForm').addEventListener('submit', function(e) {
+        e.preventDefault();
+        
+        // Correct: manually collect checked checkboxes
+        const checkedBoxes = document.querySelectorAll('#absent-container input[name="mark_attendance[]"]:checked');
+        const formData = new FormData();
+    
+        checkedBoxes.forEach(box => {
+            formData.append('mark_attendance[]', box.value);
+        });
+    
+        fetch('sapds/src/SA_get_attendance.php', {
+            method: 'POST',
+            body: formData
+        })
+        .then(response => response.text())
+        .then(data => {
+            alert('Manual attendance updated!');
+            loadAttendance(); // Reload updated attendance
+        })
+        .catch(error => {
+            console.error('Error submitting attendance:', error);
+        });
+    });
+    
+    // Important to call on page load
+    window.onload = loadAttendance;
+    
+    function openModal() {
+        document.getElementById("pdfModal").style.display = "block";
+    }
+    
+    function closeModal() {
+        document.getElementById("pdfModal").style.display = "none";
+    }
+    
+    // Submit PDF form
+    document.getElementById('pdfForm').addEventListener('submit', function(e) {
+        e.preventDefault();
+        const startDate = document.getElementById('startDate').value;
+        const endDate = document.getElementById('endDate').value || startDate;
+        
+        const url = `/sapds/src/generate_pdf.php?startDate=${startDate}&endDate=${endDate}`;
+        window.open(url, '_blank');
+    });
+
+    </script>
 </body>
 </html>
