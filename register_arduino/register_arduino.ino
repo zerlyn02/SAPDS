@@ -90,7 +90,7 @@ void loop() {
     //Post Data
     postData = "UIDresult=" + UIDresultSend;
 
-    http.begin(client,"http://18.143.66.54/sapds/src/clerk/getUID.php");  //Specify request destination
+    http.begin(client,"http://18.141.9.202/sapds/src/clerk/getUID.php");  //Specify request destination
     http.addHeader("Content-Type", "application/x-www-form-urlencoded"); //Specify content-type header
 
     int httpCode = http.POST(postData);   //Send the request

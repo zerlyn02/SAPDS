@@ -13,7 +13,7 @@ MFRC522 mfrc522(SS_PIN, RST_PIN); // correct variable name
 const char* ssid = "potatohaochi";
 const char* password = "hahahaha"; // not needed for open WiFi
 
-const char* server = "18.143.66.54"; // server IP
+const char* server = "18.141.9.202"; // server IP
 const int serverPort = 80;
 const String endpoint = "/sapds/src/attendance.php";
 
