@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Attendance</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="css/attendance.css">
+    <link rel="stylesheet" href="/sapds/src/css/navigation.css">
+    <link rel="stylesheet" href="/sapds/src/css/modal.css">
+    <script src="/sapds/src/js/navigation.js"></script>
+</head>
+<body>
+    <header>
+        <span style="font-size:30px;cursor:pointer" onclick="openNav()">&#9776;</span>
+        <img src="img/logo.png" alt="Logo">
+        <h1>Attendance Page</h1>
+    </header>
+
+    <div id="mySidenav" class="sidenav">
+        <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+        <a href="SA_main.html">Home</a>
+        <a href="SA_attendance.html">Attendance</a>
+        <a href="SA_location.html">Location</a>
+        <a href="SA_schedule.html">Schedule</a>
+    </div>
+
+    <div class="info">
+        <h2>Present Children</h2>
+        <form id="attendanceForm">
+            <div id="present-container">
+                <!-- Present attendance table loads here -->
+            </div>
+            <br>
+            <hr>
+            <h2>Absent Children</h2>
+            <div id="absent-container">
+                <!-- Absent children checkboxes load here -->
+            </div>
+            <br>
+            <button type="submit">Submit Manual Attendance</button>
+        </form>
+    </div>
+    
+    <!-- Generate PDF Button -->
+    <div class="buttons">
+    <a>
+        <img src="/sapds/src/img/summary.png" alt="Generate PDF" onclick="openModal()">
+        Generate PDF
+    </a>
+    </div>
+        
+    <!-- Modal for PDF generation -->
+    <div id="pdfModal" class="modal">
+      <div class="modal-content">
+        <span class="close" onclick="closeModal()">&times;</span>
+        <h2>Generate Attendance PDF</h2>
+        <form id="pdfForm">
+          <label for="startDate">Start Date:</label>
+          <input type="date" id="startDate" name="startDate" required>
+          <br><br>
+          <label for="endDate">End Date:</label>
+          <input type="date" id="endDate" name="endDate">
+          <br><br>
+          <button type="submit">Generate PDF</button>
+        </form>
+      </div>
+    </div>
+
+
+    <script>
+    function loadAttendance() {
+        fetch('SA_get_attendance.php')
+            .then(response => response.text())
+            .then(data => {
+                const parser = new DOMParser();
+                const doc = parser.parseFromString(data, 'text/html');
+    
+                document.getElementById('present-container').innerHTML = doc.getElementById('present-table').outerHTML;
+                document.getElementById('absent-container').innerHTML = doc.getElementById('absent-list').outerHTML;
+            });
+    }
+    
+    document.getElementById('attendanceForm').addEventListener('submit', function(e) {
+        e.preventDefault();
+        const checkedBoxes = document.querySelectorAll('#absent-container input[name="id"]:checked');
+        if (checkedBoxes.length === 0) {
+            alert("Please select at least one student to mark as present.");
+            return;
+        }
+    
+        const formData = new FormData();
+    
+        checkedBoxes.forEach(box => {
+            console.log("Selected child ID:", box.value);
+            formData.append('id', box.value);
+        });
+    
+        // Add location manually
+        formData.append('location', 'Main Gate');
+    
+        fetch('attendance.php', {
+            method: 'POST',
+            body: formData
+        })
+        .then(response => response.text())
+        .then(data => {
+            console.log("Server response:", data);
+            alert('Manual attendance updated!');
+            loadAttendance(); // Reload updated attendance
+        })
+        .catch(error => {
+            console.error('Error submitting attendance:', error);
+        });
+    });
+    // Important to call on page load
+    window.onload = loadAttendance;
+    
+    function openModal() {
+        document.getElementById("pdfModal").style.display = "block";
+    }
+    
+    function closeModal() {
+        document.getElementById("pdfModal").style.display = "none";
+    }
+    
+    // Submit PDF form
+    document.getElementById('pdfForm').addEventListener('submit', function(e) {
+        e.preventDefault();
+        const startDate = document.getElementById('startDate').value;
+        const endDate = document.getElementById('endDate').value || startDate;
+        
+        const isMobile = /Mobi|Android/i.test(navigator.userAgent);
+        
+        if (isMobile) {
+            const fullUrl = `http://18.141.9.202/sapds/src/generate_pdf.php?startDate=${startDate}&endDate=${endDate}`;  
+            window.location.href = fullUrl;
+        } else {
+            const url = `/sapds/src/generate_pdf.php?startDate=${startDate}&endDate=${endDate}`;
+            window.open(url, '_blank');
+        }
+    
+        closeModal();
+    });
+
+    </script>
+</body>
+</html>

@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Location</title>
+    <link rel="stylesheet" href="/sapds/src/css/attendance.css">
+    <link rel="stylesheet" href="/sapds/src/css/navigation.css">
+    <script src="/sapds/src/js/navigation.js"></script>
+    
+    <style>
+    .boxgreen {
+      width: 80px;
+      height: 20px;
+      background-color: #7df5af;
+    }
+    
+    .boxred {
+      width: 80px;
+      height: 20px;
+      background-color: #f74848;
+    }
+    
+    .boxes td {
+      border: none !important;
+      background-color:white
+    }
+    
+    </style>
+</head>
+<body>
+    <header>
+        <span style="font-size:30px;cursor:pointer" onclick="openNav()">&#9776;</span>
+        <img src="/sapds/src/img/logo.png" alt="Logo">
+        <h1>Location Page</h1>
+    </header>
+
+    <div id="mySidenav" class="sidenav">
+        <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+        <a href="clerk_main.html">Home</a>
+        <a href="C_attendance.html">Attendance</a>
+        <a href="C_location.html">Location</a>
+        <a href="timetable.php">Schedule</a>
+        <a href="C_readtag.php">Read RFID Tag</a>
+        <a href="C_register.php">Register</a>
+        <a href="C_userdata.php">Student list</a>
+    </div>
+
+    <div class="info">
+        <div class="search-container">
+            <input type="text" id="searchInput" onkeyup="searchTable()" placeholder="Search for names..">
+            <select id="classFilter" onchange="filterTable()">
+                <option value="">Filter by Class</option>
+                <option value="1Alpha">Class 1Alpha</option>
+                <option value="1Bestari">Class 1Bestari</option>
+                <!-- Add other classes as necessary -->
+            </select>
+        </div>
+        
+        <table class="boxes">
+          <tr>
+            <td style="width: 80px;"><div class="boxgreen"></div></td>
+            <td>Entry</td>
+          </tr>
+          <tr>
+            <td><div class="boxred"> </div></td>
+            <td>Exit</td>
+          </tr>
+        </table>
+
+        <table id="location-table" style="font-size: 14px;">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Class</th>
+                    <th>Date</th>
+                    <th>Time</th>
+                    <th>Location</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Data will be filled in by JavaScript -->
+            </tbody>
+        </table>        
+    </div>
+
+    <script>
+        let originalData = [];
+    
+        function fetchLocationData() {
+            fetch("../SA_location.php")
+                .then(res => res.json())
+                .then(locData => {
+                    if (locData.success) {
+                        originalData = locData.data;
+                        renderFilteredTable();
+                    } else {
+                        console.error(locData.message);
+                    }
+                });
+        }
+    
+        function renderFilteredTable() {
+            const searchValue = document.getElementById('searchInput').value.toUpperCase();
+            const classValue = document.getElementById('classFilter').value.toUpperCase();
+    
+            const filteredData = originalData.filter(row => {
+                const matchesName = row.name.toUpperCase().includes(searchValue);
+                const matchesClass = !classValue || row.class.toUpperCase() === classValue;
+                return matchesName && matchesClass;
+            });
+    
+            const tableBody = document.querySelector("#location-table tbody");
+            tableBody.innerHTML = '';
+    
+            filteredData.forEach(row => {
+                const tr = document.createElement("tr");
+    
+                if (row.status.toLowerCase() === "in") {
+                    tr.style.backgroundColor = "#7df5af";
+                } else if (row.status.toLowerCase() === "out") {
+                    tr.style.backgroundColor = "#f74848";
+                }
+    
+                tr.innerHTML = `
+                    <td>${row.name}</td>
+                    <td>${row.class}</td>
+                    <td>${row.date}</td>
+                    <td>${row.time.slice(0, 8)}</td>
+                    <td>${row.location}</td>
+                `;
+                tableBody.appendChild(tr);
+            });
+        }
+    
+        document.getElementById('searchInput').addEventListener('input', renderFilteredTable);
+        document.getElementById('classFilter').addEventListener('change', renderFilteredTable);
+    
+        document.addEventListener("DOMContentLoaded", function () {
+            fetchLocationData();
+            setInterval(fetchLocationData, 3000);
+        });
+    </script>
+
+</body>
+</html>

@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Schedule</title>
+  <link rel="stylesheet" href="css/attendance.css" />
+  <link rel="stylesheet" href="/sapds/src/css/navigation.css" />
+  <script src="/sapds/src/js/navigation.js"></script>
+</head>
+<body>
+  <header>
+    <span style="font-size:30px;cursor:pointer" onclick="openNav()">&#9776;</span>
+    <img src="img/logo.png" alt="Logo" />
+    <h1>Schedule Page</h1>
+  </header>
+
+  <div id="mySidenav" class="sidenav">
+    <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+    <a href="SA_main.html">Home</a>
+    <a href="SA_attendance.html">Attendance</a>
+    <a href="SA_location.html">Location</a>
+    <a href="SA_schedule.html">Schedule</a>
+  </div>
+
+  <div class="info">
+    <span id="teacher-name" style="display:none;"></span>
+    <p>
+      <label for="class">Class:</label>
+      <select id="class" name="class">
+        <option value="own">Teaching schedule</option>
+        <option value="1Alpha">1Alpha</option>
+        <option value="1Bestari">1Bestari</option>
+      </select>
+    </p>
+  </div>
+
+  <div class="info">
+    <div class="table-container">
+      <h2 id="schedule-heading" style="margin-block-start:0px;">Your Schedule</h2>
+      <table id="schedule-table">
+        <thead></thead>
+        <tbody></tbody>
+      </table>
+    </div>
+  </div>
+
+  <script>
+    const days = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'];
+    const times = [
+      '08:00-09:00', '09:00-10:00', '10:00-11:00',
+      '11:00-12:00', '12:00-13:00', '13:00-14:00'
+    ];
+
+    document.addEventListener("DOMContentLoaded", () => {
+      fetch('SA_main.php')
+        .then(res => res.json())
+        .then(data => {
+          console.log(data);
+          if (data.message) {
+            console.error(data.message);
+          } else {
+            document.getElementById('teacher-name').textContent = data.name;
+    
+            // Set heading
+            document.getElementById('schedule-heading').textContent = "Your Schedule";
+    
+            loadSchedule('own', data.name);
+          }
+        })
+        .catch(err => console.error('Fetch error:', err));
+
+
+      document.getElementById('class').addEventListener('change', function () {
+        const selectedClass = this.value;
+        const teacherName = document.getElementById('teacher-name').textContent;
+      
+        // Update heading
+        const heading = document.getElementById('schedule-heading');
+        if (selectedClass === 'own') {
+          heading.textContent = "Your Schedule";
+        } else {
+          heading.textContent = `Class ${selectedClass} Schedule`;
+        }
+      
+        loadSchedule(selectedClass, teacherName);
+      });
+
+    });
+
+    function generateEmptyTable() {
+      const thead = document.querySelector('#schedule-table thead');
+      const tbody = document.querySelector('#schedule-table tbody');
+      thead.innerHTML = '';
+      tbody.innerHTML = '';
+
+      // Table header
+      const trHead = document.createElement('tr');
+      trHead.innerHTML = `<th>Time</th>` + days.map(day => `<th>${day}</th>`).join('');
+      thead.appendChild(trHead);
+
+      // Table body
+      times.forEach(time => {
+        const tr = document.createElement('tr');
+        tr.innerHTML = `<td>${time}</td>` + days.map(() => `<td></td>`).join('');
+        tbody.appendChild(tr);
+      });
+    }
+
+    function loadSchedule(selectedClass, teacherName) {
+      const url = selectedClass === 'own'
+        ? `get_teacher_schedule.php?teacher=${encodeURIComponent(teacherName)}`
+        : `get_class_timetable.php?class=${encodeURIComponent(selectedClass)}`;
+
+      fetch(url)
+        .then(res => res.json())
+        .then(schedule => {
+          generateEmptyTable();
+
+          if (schedule.error) {
+            alert(schedule.error);
+            return;
+          }
+
+          const table = document.getElementById('schedule-table');
+          const tbodyRows = table.tBodies[0].rows;
+
+          schedule.forEach(item => {
+            const dayIndex = days.indexOf(item.day);
+            const timeIndex = times.indexOf(item.timeslot);
+
+            if (dayIndex !== -1 && timeIndex !== -1) {
+              const cell = tbodyRows[timeIndex].cells[dayIndex + 1];
+              cell.innerHTML = selectedClass === 'own'
+                ? `${item.subject} (${item.class})`
+                : `${item.subject}`;
+              if (item.day === 'Monday') {
+                cell.classList.add('highlight');
+              }
+            }
+          });
+        })
+        .catch(err => console.error('Schedule fetch error:', err));
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,7 @@
+{
+    "require": {
+        "phpmailer/phpmailer": "^6.9",
+        "google/auth": "^1.47",
+        "guzzlehttp/guzzle": "^7.9"
+    }
+}

@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mobile Test</title>
+</head>
+<body>
+    <h1>Mobile Detection Test</h1>
+
+    <script>
+        // Check if the device is mobile
+        const isMobile = /Mobi|Android/i.test(navigator.userAgent);
+
+        // Show an alert based on the device type
+        if (isMobile) {
+            alert('You are using a mobile device.');
+        } else {
+            alert('You are using a desktop device.');
+        }
+    </script>
+</body>
+</html>

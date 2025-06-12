@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Guardian Dashboard</title>
+    <link rel="stylesheet" href="css/main.css">
+    <script>
+      document.addEventListener("DOMContentLoaded", function() {
+          fetch('G_main.php')
+              .then(response => {
+                  if (!response.ok) {
+                      throw new Error('Network response was not ok');
+                  }
+                  return response.json();
+              })
+              .then(data => {
+                  if (data.message) {
+                      console.error(data.message);
+                  } else {
+                      document.getElementById('guardian-name').textContent = data.guardian_name;
+                      document.getElementById('child-name').textContent = data.child_name;
+                      document.getElementById('child-class').textContent = data.class;
+                      localStorage.setItem('child_name', data.child_name);
+                  }
+              })
+              .catch(error => {
+                  console.error('Error fetching data:', error);
+                  // Handle error gracefully
+                  document.getElementById('guardian-name').textContent = 'Error fetching data';
+                  document.getElementById('child-name').textContent = 'Error fetching data';
+                  document.getElementById('child-class').textContent = 'Error fetching data';
+              });
+      });
+
+    </script>
+</head>
+<body>
+    <header>
+        <img src="img/logo.png" alt="SAPDS Logo">
+        <h1>SAPDS</h1>
+    </header>
+
+    <div class="info">
+        <p><strong>Guardian:</strong> <span id="guardian-name">(name)</span></p>
+        <p><strong>Child:</strong> <span id="child-name">(name)</span></p>
+        <p><strong>Class:</strong> <span id="child-class">Child is not registered!</span></p>
+    </div>
+
+    <div class="buttons">
+        <a href="G_attendance.html">
+            <img src="img/att.webp" alt="Attendance">
+            Attendance
+        </a>
+        <a href="G_location.html">
+            <img src="img/location.jpg" alt="Location">
+            Location
+        </a>
+        <a href="G_schedule.html">
+            <img src="img/schedule.jpg" alt="Schedule">
+            Schedule
+        </a>
+        <a href="#" id="logoutButton">
+            <img src="img/logout.webp" alt="Logout">
+            Logout
+        </a>
+    </div>
+
+    <div class="modal" id="logoutModal">
+        <div class="modal-content">
+            <p>Are you sure you want to logout?</p>
+            <button class="confirm" onclick="confirmLogout()">Confirm</button>
+            <button class="cancel" onclick="closeModal()">Cancel</button>
+        </div>
+    </div>
+
+    <script>
+        const logoutButton = document.getElementById('logoutButton');
+        const logoutModal = document.getElementById('logoutModal');
+
+        logoutButton.addEventListener('click', () => {
+            logoutModal.style.display = 'flex';
+        });
+
+        function closeModal() {
+            logoutModal.style.display = 'none';
+        }
+
+        function confirmLogout() {
+          const name = document.getElementById('guardian-name').textContent;
+  
+          fetch('logout.php', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ name: name.trim() })
+          })
+          .then(response => response.text())
+          .then(data => {
+              window.location.href = 'index.html';
+          })
+          .catch(error => console.error('Logout failed:', error));
+        }
+    </script>
+</body>
+</html>

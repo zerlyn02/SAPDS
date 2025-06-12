@@ -1,0 +1,6 @@
+{
+    "require": {
+        "tecnickcom/tcpdf": "^6.9",
+        "google/auth": "^1.47"
+    }
+}
