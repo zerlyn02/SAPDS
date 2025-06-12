@@ -44,4 +44,4 @@ This is a attendance system for primary/secondary school students, framework use
 http://18.141.9.202/sapds/src/index.html
 
 # Coding file located at:
-sapds>src
+ec2-user>sapds>src
